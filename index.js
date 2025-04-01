@@ -1,6 +1,5 @@
 const express = require("express");
 const axios = require("axios");
-const nodemon = require("nodemon");
 
 const app = express();
 app.use(express.json());
@@ -8,12 +7,16 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/", express.static("public"));
 app.set("view engine", "ejs");
 app.set("views", "./views");
-app.use(nodemon);
 
 
-const TOKEN = "EAAQpPlrGId4BOZBK6QRLZAy5AkQjq7Y3qVyRGnkHLPK94scRuqk81hNBOUZB5s42OFZBneIbThVhbRx8rDikOiCG3pUeLYdae0HmjiwG7ENENe55F5AR5ODCBgHbKS6n26FtOPlWLYB7D47dNdJhUh2g4EoCcuMOQaE5FzF7wbeTSHDvkHLZCBRSWo6XABuK6pGxj6G7HlHJoZCZBCRxdHUT8uCsq8ZD";
-const VERIFY_TOKEN = "YOUR_VERIFY_TOKEN";
-const PHONE_NUMBER_ID = "582030154999036";
+
+const TOKEN = process.env.TOKEN || "EAAHfmAcYAfABOwKDWdGOYrSiNakj0chZAXa5TyZCOdoBIctAAvLqO4UlRBZBUsxJ0J0qrpuiIWi7fE6tkLei5m6S4GwXXYnngT6mXJ6qRTpS4reML1YkxH8aaNFiQTS3SgoDVhFFpzfsYCM7FGSZBtGb0qQhTDD45tCPQEr4ZCHxCjw01L8PcHxiY3m36ZAfvBJ0ZCZCCHaOYJSlNxiGv57TZBEQE1f0ZD";
+const VERIFY_TOKEN = process.env.VERIFY_TOKEN || "";
+const PHONE_NUMBER_ID =  process.env.PHONE_NUMBER_ID || "1183590933141053";
+
+app.get("/", (req, res) => {
+    res.render("index");
+});
 
 // Vérification du Webhook
 app.get("/webhook", (req, res) => {
@@ -23,6 +26,8 @@ app.get("/webhook", (req, res) => {
         res.sendStatus(403);
     }
 });
+
+
 
 // Réception des messages WhatsApp
 app.post("/webhook", async (req, res) => {
@@ -57,4 +62,4 @@ async function sendMessage(to, message) {
     );
 }
 
-app.listen(3000, () => console.log("Bot WhatsApp en ligne 🚀"));
+app.listen(3000, () => console.log("Bot WhatsApp en ligne sur port 3000 🚀"));
